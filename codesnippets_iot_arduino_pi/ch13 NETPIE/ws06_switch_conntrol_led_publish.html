@@ -1,0 +1,65 @@
+
+<script src="https://cdn.netpie.io/microgear.js"></script>
+<script> 
+	const APPID = "KobkiatProject"; 
+	const KEY = "RvbgL0kxxxxxxyy"; // 
+	const SECRET = "VK3mHFPHwuM1xxxxyyyyyyy"; //
+	const ALIAS = "switchByHtml"; // 
+
+	var publishTopic = '/kobkiat/switch'
+
+	var microgear = Microgear.create(
+		{ 	key: KEY, 
+			secret: SECRET,
+			alias: ALIAS
+		});
+
+
+	microgear.on('message', function(topic,msg) { 
+		document.getElementById("data").innerHTML = topic + " " + msg; 
+		if (msg=='1'){
+			document.getElementById("button").innerText="Now : On"
+			document.getElementById("status").innerText="It's now ON."
+		} else if (msg=="0") {
+			document.getElementById("status").innerText="It's now OFF."
+			document.getElementById("button").innerText="Off"
+		}
+	});
+
+
+	function toggle() {
+		if (document.getElementById("button").innerHTML=="Off"){
+
+			microgear.publish(publishTopic, '1');
+		} else {
+
+			microgear.publish(publishTopic, '0');
+		}
+	}
+
+
+	microgear.on('connected', function() { 
+		microgear.setAlias(ALIAS); 
+
+		document.getElementById("data").innerHTML = "connected to netpie...";
+
+		});
+
+	microgear.on('present', function(event) {
+		document.getElementById("status").innerHTML = "found iot.. "+event.alias;
+			console.log(event);
+		});
+
+	microgear.on('absent', function(event) { // not work
+		document.getElementById("status").innerHTML = "some iot is down..";
+			console.log(event);
+		});
+
+	microgear.connect(APPID); // สร้างการเชื่อมต่อไปยัง NETPIE
+
+</script>
+<div id="data">_____</div>
+<div id="status">_____</div>
+<center>
+<button onclick="toggle()" id="button">Off</button>
+</center>

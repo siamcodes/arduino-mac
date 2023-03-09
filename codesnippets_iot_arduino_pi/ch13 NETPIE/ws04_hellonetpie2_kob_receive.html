@@ -1,0 +1,47 @@
+
+
+<script src="https://cdn.netpie.io/microgear.js"></script>
+<script> 
+	const APPID = "AppId"; // 
+	const KEY = "RvbgL_key2"; //  
+	const SECRET = "VK3mHFP_secret2Q"; // 
+	const ALIAS = "kobkiatHtml"; //  
+	
+	var microgear = Microgear.create(
+		{ 	key: KEY, 
+			secret: SECRET,
+			alias : ALIAS 
+		});
+	// สร้างฟังก์ชั่นที่จะตอบสนองต่อข้อความที่เข้ามา 
+
+	microgear.on('message', function(topic,msg) { 
+		//ในที่นี้เราจะเอาข้อความไปแทนข้อความของ HTML element ชื่อ data 
+		console.log(topic + " : "+msg);
+		document.getElementById("data").innerHTML = topic +" : " + msg; 
+	});
+
+	// สร้างฟังก์ชั่นที่จะถูกเรียกเมื่อเชื่อมต่อ NETPIE สาเร็จ 
+
+	microgear.on('connected', function() { 
+		microgear.setAlias(ALIAS); 
+		//ตั้งชื่อเรียกให้กับอุปกรณ์ตามตัวแปรที่ตั้งไว้ส่วนต้นของไฟล์
+
+		document.getElementById("data").innerHTML = "Kobkiat is connected to netpie...";
+
+		});
+
+
+	microgear.on('present', function(event) {
+			//console.log(event);
+			console.log(event.type + " " + event.alias);
+	});
+
+	microgear.on('absent', function(event) {
+			console.log(event);
+			//console.log(event.alias + event.type);
+	});
+
+	microgear.connect(APPID); // สร้างการเชื่อมต่อไปยัง NETPIE
+
+</script>
+<div id="data">_____</div>

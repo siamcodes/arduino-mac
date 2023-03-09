@@ -1,0 +1,48 @@
+
+<script src="https://cdn.netpie.io/microgear.js"></script>
+<script> 
+	const APPID = "AppId"; // AppID 
+	const KEY = "u1urxmmxxxH"; // Key - alice
+	const SECRET = "NVhwAguxxxxxx50p9G"; // Secret
+	const ALIAS = "myhtml"; 
+
+	var counter = 1;
+
+	var microgear = Microgear.create(
+		{ 	key: KEY, 
+			secret: SECRET,
+			alias : ALIAS 
+		});
+
+
+	microgear.on('connected', function() { 
+		microgear.setAlias(ALIAS); 
+
+		document.getElementById("data").innerHTML = "Connected to netpie...";
+
+		setInterval(function() { 
+
+			counter++;
+			microgear.chat(ALIAS,"Hello from Netpie1 (Alice) "+ counter); // +Date.now()); 
+			microgear.chat("kobkiatHtml", "Halo from Alice ja " + counter);
+			console.log(counter);
+		},2000); 
+	});
+
+
+	microgear.on('message', function(topic,msg) { 
+		//ในที่นี้เราจะเอาข้อความไปแทนข้อความของ HTML element ชื่อ data 
+		document.getElementById("data").innerHTML = topic +" : " + msg; 
+	});
+
+	microgear.on('present', function(event) {
+			console.log(event);
+	});
+
+	microgear.on('absent', function(event) {
+			console.log(event);
+	});
+
+	microgear.connect(APPID); // สร้างการเชื่อมต่อไปยัง NETPIE
+</script>
+<div id="data">_____</div>

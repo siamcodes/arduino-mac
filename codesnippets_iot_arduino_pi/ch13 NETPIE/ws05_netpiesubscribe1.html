@@ -1,0 +1,52 @@
+
+<script src="https://cdn.netpie.io/microgear.js"></script>
+<script> 
+	const APPID = "APPID"; // 
+	const KEY = "RvbgL0kLxxxxx"; // 
+	const SECRET = "VK3mHFPHwuxxxxxxx"; //
+	const ALIAS = "kobkiatSubHtml"; // 
+	
+	var counter = 1;
+	var topic = "/sensor/+"; // subscribe
+
+	var microgear = Microgear.create(
+		{ 	key: KEY, 
+			secret: SECRET,
+			alias : ALIAS 
+		});
+	
+
+	microgear.on('message', function(topic,msg) { 
+
+		document.getElementById("receive").innerHTML = topic +" : " + msg; 
+	});
+
+
+
+	microgear.on('connected', function() { 
+		microgear.setAlias(ALIAS); 
+
+		document.getElementById("data").innerHTML = "Connected using Kobkiat...";
+
+		microgear.subscribe(topic);
+
+	});
+
+	microgear.on('disconnected', function(event) {
+			document.getElementById("data").innerHTML = "Disconnected from netpie...";
+			console.log(event);
+		});
+
+	microgear.on('present', function(event) {
+			console.log(event);
+		});
+
+	microgear.on('absent', function(event) {
+			console.log(event);
+		});
+
+	microgear.connect(APPID); // สร้างการเชื่อมต่อไปยัง NETPIE
+
+</script>
+<div id="data">_____</div>
+<div id="receive">_____</div>
